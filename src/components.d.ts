@@ -10,7 +10,14 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface YtIframe {}
+  interface YtIframe {
+    'height': string;
+    'pause': () => Promise<void>;
+    'play': (video: string) => Promise<void>;
+    'stop': () => Promise<void>;
+    'videoId': string;
+    'width': string;
+  }
 }
 
 declare global {
@@ -27,7 +34,12 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface YtIframe {}
+  interface YtIframe {
+    'height'?: string;
+    'onReadyIframe'?: (event: CustomEvent<any>) => void;
+    'videoId'?: string;
+    'width'?: string;
+  }
 
   interface IntrinsicElements {
     'yt-iframe': YtIframe;

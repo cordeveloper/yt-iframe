@@ -11,8 +11,39 @@
 </head>
 <body>
 
-  <yt-iframe></yt-iframe>
+  <yt-iframe id="p1" width="100%" video-id="62OxFo4cZWI"></yt-iframe>
+  <button id="play">play</button>
+  <button id="stop">stop</button>
+  <button id="pause">pause</button>
+  <p>
+    <yt-iframe id="jh5" width="50%" video-id="mJSlmnBS9rs"></yt-iframe>
+    <button id="play2">play</button>
+  </p>
+  <script>
 
+    const play = document.querySelector('#play');
+    const play2 = document.querySelector('#play2');
+    const stop = document.querySelector('#stop');
+    const pause = document.querySelector('#pause');
+    const iframe = document.querySelector('#p1');
+    const iframe2 = document.querySelector('#jh5');
 
+    play.addEventListener('click', () => {
+      iframe.play('https://youtu.be/nDJo_qm0Fac');
+    })
+    play2.addEventListener('click', () => {
+      iframe2.play();
+    })
+    stop.addEventListener('click', () => {
+      iframe.stop();
+    })
+    pause.addEventListener('click', () => {
+      iframe.pause();
+    });
+
+    document.querySelector('body').addEventListener('readyIframe', () => {
+      console.log("LISTO!!");
+    })
+  </script>
 </body>
 </html>
