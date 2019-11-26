@@ -1,4 +1,4 @@
-import {Component, h, Element, Prop, Method, Event, EventEmitter, State} from '@stencil/core';
+import {Component, h, Element, Prop, Method, Listen, Event, EventEmitter, State} from '@stencil/core';
 
 
 const iframes = [];
@@ -44,6 +44,11 @@ export class YtIframe {
     }
   }
 
+  @Listen('readyIframe')
+  readyIframeHandler(event: CustomEvent) {
+    this.backdrop.style.display = 'none';
+  }
+
   @Method() stop():void {
     this.player.stopVideo();
   }
@@ -73,7 +78,6 @@ export class YtIframe {
   onPlayerReady() {
     this.readyIframe.emit();
     this.load = false;
-    this.backdrop.style.display = 'none';
   }
 
   ready() {
@@ -95,7 +99,7 @@ export class YtIframe {
                 'onReady': iframe.onPlayerReady.bind(iframe),
               }
             });
-            console.log(iframe);
+         
           })
         };
       }
