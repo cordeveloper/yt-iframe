@@ -1,19 +1,26 @@
 import {Component, h, Element, Prop, Method, Event, EventEmitter, State} from '@stencil/core';
 
+
 const iframes = [];
 
 @Component({
   tag: "yt-iframe",
   styleUrl: "yt-iframe.css",
-  shadow: true
+  shadow: true,
 })
 export class YtIframe {
 
   iframe!: HTMLElement;
+  backdrop!: HTMLElement;
+  loader!: HTMLElement;
+  @Element() host: HTMLElement;
+
+
 
   @Prop({reflect: true, mutable: true}) videoId: string;
   @Prop({reflect: true, mutable: true}) width: string;
   @Prop({reflect: true, mutable: true}) height: string;
+
 
   @State() load = true;
 
@@ -48,6 +55,9 @@ export class YtIframe {
   render() {
     return (
       <host>
+        <section class="backdrop" ref={(el) => this.backdrop = el as HTMLElement}>
+          <div class="loader" ref={(el) => this.loader = el as HTMLElement}>Loading...</div>
+        </section>
         <div id="player" ref={(el) => this.iframe = el as HTMLElement}></div>
       </host>
     )
@@ -55,20 +65,21 @@ export class YtIframe {
 
   componentDidLoad() {
     iframes.push(this);
-
-    this.ready();
+    if (!document.querySelector('script[src*="youtube"]')) {
+      this.ready();
+    }
   }
 
   onPlayerReady() {
     this.readyIframe.emit();
     this.load = false;
+    this.backdrop.style.display = 'none';
   }
 
   ready() {
 
-    window.onload = () => {
+      window.onload = () => {
 
-      if (!document.querySelector('script[src*="youtube"]')) {
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -81,16 +92,14 @@ export class YtIframe {
               width: iframe.width ? iframe.width: '640',
               videoId: iframe.videoId ? iframe.videoId : 'M7lc1UVf-VE',
               events: {
-                'onReady': iframe.onPlayerReady.bind(this),
+                'onReady': iframe.onPlayerReady.bind(iframe),
               }
             });
             console.log(iframe);
           })
         };
       }
-    }
+    
   }
-
-
 
 }
